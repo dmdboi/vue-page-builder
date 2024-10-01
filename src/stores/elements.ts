@@ -1,17 +1,21 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import type { ElementType } from "@/types";
+import { getRandomId } from "@/utils/id";
 
 export const useElementStore = defineStore("elements", () => {
   const currentHTML = ref([
     {
+      id: getRandomId(),
       type: "div",
       content: [
         {
+          id: getRandomId(),
           type: "p",
           content: ["This is a paragraph"],
         },
         {
+          id: getRandomId(),
           type: "a",
           content: ["Click me"],
           attributes: {
@@ -53,7 +57,7 @@ export const useElementStore = defineStore("elements", () => {
   }
 
   /** Set a style attribute on the element */
-  function setStyleAttribute(style: Record<string, string | number>) {
+  function setStyleAttribute(e: Event) {
     /** If selectedElement has no attribute object yet */
     if (!selectedElement.value.attributes) {
       selectedElement.value.attributes = {
@@ -62,13 +66,14 @@ export const useElementStore = defineStore("elements", () => {
     }
 
     /** Set the style attribute */
-    selectedElement.value.attributes.style = style;
+    // @ts-ignore
+    selectedElement.value.attributes.style = (e.target as HTMLInputElement).value;
 
     updateElement(selectedElement.value);
   }
 
   /** Set a src attribute on the element */
-  function setSrcAttribute(src: string) {
+  function setSrcAttribute(e: Event) {
     /** If selectedElement has no attribute object yet */
     if (!selectedElement.value.attributes) {
       selectedElement.value.attributes = {
@@ -77,13 +82,13 @@ export const useElementStore = defineStore("elements", () => {
     }
 
     /** Set the src attribute */
-    selectedElement.value.attributes.src = src;
+    selectedElement.value.attributes.src = (e.target as HTMLInputElement).value;
 
     updateElement(selectedElement.value);
   }
 
   /** Set an alt attribute on the element */
-  function setAltAttribute(alt: string) {
+  function setAltAttribute(e: Event) {
     /** If selectedElement has no attribute object yet */
     if (!selectedElement.value.attributes) {
       selectedElement.value.attributes = {
@@ -92,13 +97,13 @@ export const useElementStore = defineStore("elements", () => {
     }
 
     /** Set the alt attribute */
-    selectedElement.value.attributes.alt = alt;
+    selectedElement.value.attributes.alt = (e.target as HTMLInputElement).value;
 
     updateElement(selectedElement.value);
   }
 
   /** Set an href attribute on the element */
-  function setHrefAttribute(href: string) {
+  function setHrefAttribute(e: Event) {
     /** If selectedElement has no attribute object yet */
     if (!selectedElement.value.attributes) {
       selectedElement.value.attributes = {
@@ -107,7 +112,7 @@ export const useElementStore = defineStore("elements", () => {
     }
 
     /** Set the href attribute */
-    selectedElement.value.attributes.href = href;
+    selectedElement.value.attributes.href = (e.target as HTMLInputElement).value;
 
     updateElement(selectedElement.value);
   }
@@ -116,6 +121,13 @@ export const useElementStore = defineStore("elements", () => {
   function updateElement(element: ElementType) {
     const index = currentHTML.value.findIndex(el => el.id === element.id);
     currentHTML.value.splice(index, 1, element);
+  }
+
+  function deleteElement() {
+    console.log("deleteElement", selectedElement.value);
+
+    // TODO: Find the element in the currentHTML array and remove it
+    clearSelection();
   }
 
   return {
@@ -128,7 +140,8 @@ export const useElementStore = defineStore("elements", () => {
     setAltAttribute,
     setHrefAttribute,
     updateElement,
+    deleteElement,
     currentTab,
-    currentHTML
+    currentHTML,
   };
 });

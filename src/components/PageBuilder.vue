@@ -16,30 +16,25 @@
       <DraggableElements v-if="currentTab === 'elements'" />
 
       <!-- Selected Elements -->
-      <div class="mt-4" v-if="currentTab === 'attributes'">
-        <h3 class="mb-4 text-xl font-bold text-center">Selected Element</h3>
-
-        <!-- SelectedElement -->
-        <div>
-          {{ selectedElement.type }}
-        </div>
-
-        <!-- Classes Input -->
-        <div>
-          <label for="classes" class="block">Classes</label>
-          <input @change="setClassAttribute" type="text" id="classes" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded" />
-        </div>
-      </div>
+      <AttributesTab v-if="currentTab === 'attributes'" />
 
       <button @click="resetHTML" class="px-4 py-2 mt-8 text-sm text-white bg-blue-500 rounded">Reset</button>
     </div>
 
     <!-- Dropzone where HTML gets built -->
     <div class="w-4/5 p-6">
-      <h3 class="mb-4 text-xl font-bold text-center">Drop Elements Here</h3>
       <VueDraggable
         v-model="currentHTML"
-        :group="{ name: 'elements', pull: 'clone', put: true }"
+        :group="{
+          name: 'elements',
+          pull: 'clone',
+          put: e => {
+            console.log('Put', e);
+            return true;
+          },
+        }"
+        @clone="clone"
+        @spill="clone"
         item-key="label"
         class="min-h-full p-4 bg-white border border-gray-300 rounded-lg">
         <template v-for="(element, index) in currentHTML" :key="index">
@@ -52,29 +47,33 @@
 </template>
 
 <script setup lang="ts">
-import { VueDraggable } from "vue-draggable-plus";
+import { watch } from "vue";
 import { storeToRefs } from "pinia";
+import { VueDraggable } from "vue-draggable-plus";
 
+import AttributesTab from "@/components/AttributesTab.vue";
 import NestedRenderer from "@/components/NestedRenderer.vue";
 import DraggableElements from "@/components/DraggableElements.vue";
 
 import { useElementStore } from "@/stores/elements";
+import { getRandomId } from "@/utils/id";
 
 const elementStore = useElementStore();
-const { setClassAttribute } = elementStore;
-
-const { currentTab, selectedElement, currentHTML } = storeToRefs(elementStore);
+const { currentTab, currentHTML } = storeToRefs(elementStore);
 
 function resetHTML() {
   currentHTML.value = [
     {
+      id: getRandomId(),
       type: "div",
       content: [
         {
+          id: getRandomId(),
           type: "p",
           content: ["This is a paragraph"],
         },
         {
+          id: getRandomId(),
           type: "a",
           content: ["Click me"],
           attributes: {
@@ -86,10 +85,18 @@ function resetHTML() {
   ];
 }
 
+function clone(event: any) {
+  console.log("Cloned", event);
+}
+
 // Function to handle updates from the child component
 const updateElement = (index: number, updatedElement: any) => {
   currentHTML.value[index] = updatedElement;
 };
+
+watch(currentHTML, () => {
+  console.log("Current HTML", currentHTML.value);
+});
 </script>
 
 <style scoped>
