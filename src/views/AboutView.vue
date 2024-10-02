@@ -1,9 +1,5 @@
-<script setup lang="ts">
-import OldRenderer from "@/components/OldRenderer.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="about">
-    <OldRenderer />
-  </div>
+  <div class="about"></div>
 </template>
