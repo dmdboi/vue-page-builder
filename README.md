@@ -9,6 +9,10 @@ A page builder built on Vue 3 and Tailwind CSS.
 
 - Drag and drop components
 
+## Screenshot
+
+![Screenshot](./cover.png)
+
 ## Contributing
 
 Feel free to contribute to this project by creating a pull request or opening an issue.

@@ -1,7 +1,7 @@
 export interface ElementType {
   id: string;
   type: string;
-  content: string[] | ElementType[];
+  content: Array<string | ElementType>;
   attributes?: {
     id?: string;
     class?: string;
@@ -10,5 +10,4 @@ export interface ElementType {
     alt?: string;
     src?: string;
   };
-  children?: ElementType[];
 }

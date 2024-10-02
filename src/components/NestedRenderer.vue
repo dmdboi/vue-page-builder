@@ -9,8 +9,10 @@
     @click.self="selectElement(element)">
     <!-- Render each child element -->
     <template v-for="(childElement, index) in element.content" :key="index">
-      <!-- Recursively render nested components if children exist -->
-      <nested-renderer v-if="childElement.content && childElement.content.length > 0" :element="childElement" @update:element="updateChild(index, $event)" />
+      <!-- If string, just render string -->
+      <p v-if="typeof childElement === 'string'">{{ childElement }}</p>
+
+      <nested-renderer v-else-if="childElement.content && childElement.content.length > 0" :element="childElement" @update:element="updateChild(index, $event)" />
       <!-- Render leaf elements -->
       <component
         @click.self="selectElement(childElement)"
@@ -71,7 +73,7 @@ const elementContent = computed({
 // Check if the element is a container type
 const isContainerElement = computed(() => {
   const containerTags = ["div", "section", "ul", "ol", "nav", "header", "footer", "li", "main"];
-  return containerTags.includes(props.element.type);
+  return containerTags.includes(props.element.type) && Array.isArray(props.element.content);
 });
 
 // Function to emit updates for child elements
