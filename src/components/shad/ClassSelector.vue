@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref } from "vue";
 import { ComboboxAnchor, ComboboxContent, ComboboxInput, ComboboxPortal, ComboboxRoot } from "radix-vue";
+
 import { CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from "@/components/ui/tags-input";
+
+import { useElementStore } from "@/stores/elements";
+
+const { selectedElement } = storeToRefs(useElementStore());
 
 const emit = defineEmits(["add", "remove"]);
 const props = defineProps<{
@@ -68,6 +74,13 @@ function remove(value: string) {
   modelValue.value = modelValue.value.filter(item => item !== value);
   emit("remove", value);
 }
+
+onMounted(() => {
+  modelValue.value =
+    selectedElement.value.attributes && selectedElement.value.attributes.class
+      ? selectedElement.value.attributes.class.split(" ").filter((item: string) => buildOptions(props.type).some(option => option.value === item))
+      : [];
+});
 </script>
 
 <template>
