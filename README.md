@@ -1,4 +1,4 @@
-# vue-page-editor
+# vue-page-builder
 
 > [!WARNING]  
 > This project is still in development and not ready for production.
@@ -9,6 +9,10 @@ A page builder built on Vue 3 and Tailwind CSS.
 
 - Drag and drop components
 - Tailwind CSS support
+
+## Demo
+
+[Demo](https://vue-page-builder.netlify.app/)
 
 ## Screenshot
 
