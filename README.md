@@ -8,6 +8,7 @@ A page builder built on Vue 3 and Tailwind CSS.
 ## Features
 
 - Drag and drop components
+- Tailwind CSS support
 
 ## Screenshot
 
