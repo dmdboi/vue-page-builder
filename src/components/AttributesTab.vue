@@ -29,7 +29,7 @@
       <Accordion title="Margins" class="mt-2 bg-white border rounded">
         <div class="px-4">
           <Label for="margins">Margins</Label>
-          <ClassSelector type="margin" @add="setClassAttribute" @remove="setClassAttribute" class="mt-1" />
+          <ClassSelector type="margin" @add="setClassAttribute" @remove="removeClassAttribute" class="mt-1" />
         </div>
       </Accordion>
 
@@ -37,7 +37,7 @@
       <Accordion title="Padding" class="mt-2 bg-white border rounded">
         <div class="px-4">
           <Label for="padding">Padding</Label>
-          <ClassSelector type="padding" @add="setClassAttribute" @remove="setClassAttribute" class="mt-1" />
+          <ClassSelector type="padding" @add="setClassAttribute" @remove="removeClassAttribute" class="mt-1" />
         </div>
       </Accordion>
     </div>
@@ -60,6 +60,6 @@ import Input from "./shad/Input.vue";
 import { Label } from "./ui/label";
 
 const elementStore = useElementStore();
-const { setClassAttribute, deleteElement } = elementStore;
+const { setClassAttribute, removeClassAttribute, deleteElement } = elementStore;
 const { currentTab, selectedElement } = storeToRefs(elementStore);
 </script>

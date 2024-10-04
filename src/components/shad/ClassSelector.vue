@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { ComboboxAnchor, ComboboxContent, ComboboxInput, ComboboxPortal, ComboboxRoot } from "radix-vue";
 import { CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from "@/components/ui/tags-input";
 
+const emit = defineEmits(["add", "remove"]);
 const props = defineProps<{
   type: string & keyof typeof classes;
 }>();
@@ -61,6 +62,12 @@ const filteredClasses = computed(() => {
     return option.label.toLowerCase().includes(searchTerm.value.toLowerCase());
   });
 });
+
+// Watch for changes in the modelValue and emit the new value
+function remove(value: string) {
+  modelValue.value = modelValue.value.filter(item => item !== value);
+  emit("remove", value);
+}
 </script>
 
 <template>
@@ -68,13 +75,7 @@ const filteredClasses = computed(() => {
     <div class="flex flex-wrap items-center gap-2 px-3">
       <TagsInputItem v-for="item in modelValue" :key="item" :value="item">
         <TagsInputItemText />
-        <TagsInputItemDelete
-          @click.prevent="
-            () => {
-              modelValue.splice(modelValue.indexOf(item), 1);
-              $emit('remove', item);
-            }
-          " />
+        <TagsInputItemDelete @remove="remove(item)" />
       </TagsInputItem>
     </div>
 

@@ -20,6 +20,7 @@ export const useElementStore = defineStore("elements", () => {
           content: ["Click me"],
           attributes: {
             href: "#",
+            target: "_blank",
           },
         },
       ],
@@ -50,16 +51,28 @@ export const useElementStore = defineStore("elements", () => {
       };
     }
 
-    console.log("setClassAttribute", selectedElement.value.attributes.class, classValue);
-
     /** If the class already exists, remove it */
     if (selectedElement.value.attributes.class && selectedElement.value.attributes.class.includes(classValue)) {
       selectedElement.value.attributes.class = selectedElement.value.attributes.class.replace(classValue, "").trim();
+      updateElement(selectedElement.value);
       return;
     }
 
     /** Set the class attribute */
     selectedElement.value.attributes.class += " " + classValue;
+
+    updateElement(selectedElement.value);
+  }
+
+  function removeClassAttribute(classValue: string) {
+    console.log("removeClassAttribute", classValue);
+
+    // Remove the class from the class attribute
+    if (selectedElement.value.attributes?.class) {
+      selectedElement.value.attributes.class = selectedElement.value.attributes.class.replace(classValue, "").trim();
+    }
+
+    console.log("selectedElement.value.attributes.class", selectedElement.value.attributes);
 
     updateElement(selectedElement.value);
   }
@@ -128,7 +141,7 @@ export const useElementStore = defineStore("elements", () => {
   /** Update the element in CurrentHTML */
   function updateElement(element: ElementType) {
     const index = currentHTML.value.findIndex(el => el.id === element.id);
-    currentHTML.value.splice(index, 1, element);
+    currentHTML.value[index] = element;
   }
 
   function deleteElement() {
@@ -143,6 +156,7 @@ export const useElementStore = defineStore("elements", () => {
     selectElement,
     clearSelection,
     setClassAttribute,
+    removeClassAttribute,
     setStyleAttribute,
     setSrcAttribute,
     setAltAttribute,

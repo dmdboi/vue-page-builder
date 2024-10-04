@@ -11,9 +11,7 @@
         </template>
       </Tabs>
 
-      <Button @click="resetHTML" class="w-full mt-4">
-        Reset HTML
-      </Button>
+      <Button @click="resetHTML" class="w-full mt-4"> Reset HTML </Button>
     </div>
 
     <!-- Dropzone where HTML gets built -->
@@ -46,14 +44,14 @@ import { watch } from "vue";
 import { storeToRefs } from "pinia";
 import { VueDraggable } from "vue-draggable-plus";
 
+import Tabs from "./shad/Tabs.vue";
+import { Button } from "./ui/button";
 import AttributesTab from "@/components/AttributesTab.vue";
 import NestedRenderer from "@/components/NestedRenderer.vue";
 import DraggableElements from "@/components/DraggableElements.vue";
 
 import { useElementStore } from "@/stores/elements";
 import { getRandomId } from "@/utils/id";
-import Tabs from "./shad/Tabs.vue";
-import { Button } from "./ui/button";
 
 const elementStore = useElementStore();
 const { currentHTML } = storeToRefs(elementStore);
