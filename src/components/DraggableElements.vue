@@ -1,8 +1,8 @@
 <template>
   <h2 class="mb-4 text-xl font-bold">Elements</h2>
-  <VueDraggable v-model="availableItems" :group="{ name: 'elements', pull: 'clone', put: false }" item-key="label" class="space-y-4">
-    <div v-for="item, index in availableItems" :key="index">
-      {{ item.label }}
+  <VueDraggable v-model="availableItems" :group="{ name: 'elements', pull: 'clone', put: false }" item-key="label" class="grid grid-cols-1 gap-2 md:grid-cols-2">
+    <div v-for="(item, index) in availableItems" :key="index" class="flex items-center justify-center h-24 bg-white border rounded-2xl">
+      <div>{{ item.label }}</div>
     </div>
   </VueDraggable>
 </template>

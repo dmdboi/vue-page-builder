@@ -42,7 +42,7 @@ export const useElementStore = defineStore("elements", () => {
   }
 
   /** Set a class attribute on the element */
-  function setClassAttribute(e: Event) {
+  function setClassAttribute(classValue: string) {
     /** If selectedElement has no attribute object yet */
     if (!selectedElement.value.attributes) {
       selectedElement.value.attributes = {
@@ -50,8 +50,16 @@ export const useElementStore = defineStore("elements", () => {
       };
     }
 
+    console.log("setClassAttribute", selectedElement.value.attributes.class, classValue);
+
+    /** If the class already exists, remove it */
+    if (selectedElement.value.attributes.class && selectedElement.value.attributes.class.includes(classValue)) {
+      selectedElement.value.attributes.class = selectedElement.value.attributes.class.replace(classValue, "").trim();
+      return;
+    }
+
     /** Set the class attribute */
-    selectedElement.value.attributes.class = (e.target as HTMLInputElement).value;
+    selectedElement.value.attributes.class += " " + classValue;
 
     updateElement(selectedElement.value);
   }

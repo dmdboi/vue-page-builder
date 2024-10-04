@@ -2,23 +2,18 @@
   <div class="flex flex-row w-full h-screen">
     <!-- Draggable Items Sidebar -->
     <div class="w-1/5 p-4 bg-gray-100 border-r border-gray-300">
-      <!-- Tabs -->
-      <div class="flex justify-center mb-4">
-        <button @click="currentTab = 'elements'" :class="{ 'bg-blue-500 text-white': currentTab === 'elements' }" class="px-4 py-2 mr-2 text-sm text-gray-700 bg-gray-200 rounded">
-          Elements
-        </button>
-        <button @click="currentTab = 'attributes'" :class="{ 'bg-blue-500 text-white': currentTab === 'attributes' }" class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded">
-          Attributes
-        </button>
-      </div>
+      <Tabs :tabs="['elements', 'attributes']">
+        <template #elements>
+          <DraggableElements />
+        </template>
+        <template #attributes>
+          <AttributesTab />
+        </template>
+      </Tabs>
 
-      <!-- Draggable List -->
-      <DraggableElements v-if="currentTab === 'elements'" />
-
-      <!-- Selected Elements -->
-      <AttributesTab v-if="currentTab === 'attributes'" />
-
-      <button @click="resetHTML" class="px-4 py-2 mt-8 text-sm text-white bg-blue-500 rounded">Reset</button>
+      <Button @click="resetHTML" class="w-full mt-4">
+        Reset HTML
+      </Button>
     </div>
 
     <!-- Dropzone where HTML gets built -->
@@ -57,9 +52,11 @@ import DraggableElements from "@/components/DraggableElements.vue";
 
 import { useElementStore } from "@/stores/elements";
 import { getRandomId } from "@/utils/id";
+import Tabs from "./shad/Tabs.vue";
+import { Button } from "./ui/button";
 
 const elementStore = useElementStore();
-const { currentTab, currentHTML } = storeToRefs(elementStore);
+const { currentHTML } = storeToRefs(elementStore);
 
 function resetHTML() {
   currentHTML.value = [
