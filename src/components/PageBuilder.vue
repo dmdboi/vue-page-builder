@@ -1,77 +1,30 @@
 <script setup lang="ts">
-import { watch } from "vue";
 import { storeToRefs } from "pinia";
 import { VueDraggable } from "vue-draggable-plus";
 
-import Tabs from "./shad/Tabs.vue";
-import { Button } from "./ui/button";
-
-import AttributesTab from "@/components/AttributesTab.vue";
 import NestedRenderer from "@/components/NestedRenderer.vue";
-import DraggableElements from "@/components/DraggableElements.vue";
 
 import { useElementStore } from "@/stores/elements";
-import { getRandomId } from "@/utils/id";
 
 const elementStore = useElementStore();
 const { currentHTML } = storeToRefs(elementStore);
-
-function resetHTML() {
-  currentHTML.value = [
-    {
-      id: getRandomId(),
-      type: "div",
-      content: [
-        {
-          id: getRandomId(),
-          type: "p",
-          content: ["This is a paragraph"],
-        },
-        {
-          id: getRandomId(),
-          type: "a",
-          content: ["Click me"],
-          attributes: {
-            href: "#",
-          },
-        },
-      ],
-    },
-  ];
-}
-
-function clone(event: any) {
-  console.log("Cloned", event);
-}
 
 // Function to handle updates from the child component
 const updateElement = (index: number, updatedElement: any) => {
   currentHTML.value[index] = updatedElement;
 };
-
-watch(currentHTML, () => {
-  console.log("Current HTML", currentHTML.value);
-});
 </script>
 
 <template>
-  <div class="flex flex-row w-full h-screen">
-    <!-- Draggable Items Sidebar -->
-    <div class="w-1/5 p-4 bg-gray-100 border-r border-gray-300">
-      <Tabs :tabs="['elements', 'attributes']">
-        <template #elements>
-          <DraggableElements />
-        </template>
-        <template #attributes>
-          <AttributesTab />
-        </template>
-      </Tabs>
-
-      <Button @click="resetHTML" class="w-full mt-4"> Reset HTML </Button>
-    </div>
-
+  <div class="flex flex-row w-full">
     <!-- Dropzone where HTML gets built -->
-    <div class="w-4/5 p-6">
+    <div class="w-full">
+      <div class="w-full h-11 rounded-t-lg border-2 border-gray-200 bg-gray-200 flex justify-start items-center space-x-1.5 px-3">
+        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+        <span class="w-3 h-3 bg-orange-500 rounded-full"></span>
+        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+      </div>
+
       <VueDraggable
         v-model="currentHTML"
         :group="{
@@ -82,10 +35,8 @@ watch(currentHTML, () => {
             return true;
           },
         }"
-        @clone="clone"
-        @spill="clone"
         item-key="label"
-        class="min-h-full p-4 bg-white border border-gray-300 rounded-lg">
+        class="min-h-full p-4 rounded-b-lg bg-secondary">
         <template v-for="(element, index) in currentHTML" :key="index">
           <!-- Pass the element as prop and handle updates via @update -->
           <NestedRenderer :element="element" @update:element="updateElement(index, $event)" />

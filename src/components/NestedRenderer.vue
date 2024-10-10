@@ -37,7 +37,7 @@
     v-else
     :is="element.type"
     :id="element.attributes?.id"
-    :class="element.attributes?.class"
+    :class="[element.attributes?.class, 'component']"
     :style="element.attributes?.style"
     :src="element.attributes?.src"
     :alt="element.attributes?.alt">
@@ -85,9 +85,22 @@ const updateChild = (index: number, updatedElement: ElementType) => {
 </script>
 
 <style scoped>
-.drag-area {
-  min-height: 50px;
-  outline: 1px dashed;
-  padding: 10px;
+.drag-area:hover {
+  border: 1px dashed #ccc;
+}
+
+/* Prevent parent elements from having a border when a child is hovered */
+.drag-area .drag-area:hover {
+  border: none;
+}
+
+/* Add hover effect for other components like image, anchor, or paragraphs */
+.component:hover {
+  border: 1px dashed #ccc;
+}
+
+/* Ensure nested hover won't trigger parent border */
+.component .component:hover {
+  border: none;
 }
 </style>

@@ -1,15 +1,13 @@
-<template>
-  <h2 class="mb-4 text-xl font-bold">Elements</h2>
-  <VueDraggable v-model="availableItems" :group="{ name: 'elements', pull: 'clone', put: false }" item-key="label" class="grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div v-for="(item, index) in availableItems" :key="index" class="flex items-center justify-center h-24 bg-white border rounded-2xl">
-      <div>{{ item.label }}</div>
-    </div>
-  </VueDraggable>
-</template>
-
 <script setup lang="ts">
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { VueDraggable } from "vue-draggable-plus";
+
+import { cn } from "@/utils";
+import { useElementStore } from "@/stores/elements";
+import AttributesTab from "./AttributesTab.vue";
+
+const { currentTab } = storeToRefs(useElementStore());
 
 const availableItems = ref([
   {
@@ -125,3 +123,26 @@ const availableItems = ref([
   },
 ]);
 </script>
+
+<template>
+  <div :class="cn('pb-12 h-screen bg-black/90', $attrs.class ?? '')">
+    <div class="py-4 space-y-4">
+      <!-- Elements Tab -->
+      <div class="px-3 py-2" v-if="currentTab === 'elements'">
+        <h2 class="px-4 mb-2 text-lg font-semibold tracking-tight">Elements</h2>
+        <VueDraggable v-model="availableItems" :group="{ name: 'elements', pull: 'clone', put: false }" item-key="label" class="grid grid-cols-1 gap-2 md:grid-cols-2">
+          <div v-for="(item, index) in availableItems" :key="index" class="flex items-center justify-center h-24 border bg-secondary text-secondary-foreground rounded-2xl">
+            <div>{{ item.label }}</div>
+          </div>
+        </VueDraggable>
+      </div>
+
+      <!-- Attributes Tab -->
+      <div class="px-3 py-2" v-if="currentTab === 'attributes'">
+        <h2 class="px-4 mb-2 text-lg font-semibold tracking-tight">Attributes</h2>
+
+        <AttributesTab />
+      </div>
+    </div>
+  </div>
+</template>

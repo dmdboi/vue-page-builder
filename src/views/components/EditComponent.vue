@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
-import ReadOnlyViewer from "@/components/readonly/ReadOnlyViewer.vue";
-import JSONViewer from "@/components/JSONViewer.vue";
 import { Button } from "@/components/ui/button";
 
 import api from "@/api/api";
+import { useElementStore } from "@/stores/elements";
 
 import type { Component } from "@/types/components";
+import PageBuilder from "@/components/PageBuilder.vue";
 
 const route = useRoute();
-const router = useRouter();
+const elementStore = useElementStore();
 
 const isLoading = ref(true);
 const component = ref<Component>();
@@ -19,6 +19,9 @@ const component = ref<Component>();
 onMounted(async () => {
   isLoading.value = true;
   component.value = (await api.components.get(route.params.id as string)).data;
+
+  // @ts-ignore
+  elementStore.currentHTML = component.value!.content;
   isLoading.value = false;
 });
 </script>
@@ -29,7 +32,7 @@ onMounted(async () => {
       <h1 class="text-2xl">Component</h1>
 
       <div>
-        <Button variant="default" @click="router.push({ name: 'edit-component', params: { id: component!.id } })"> Edit </Button>
+        <Button variant="default" @click=""> Save </Button>
       </div>
     </div>
 
@@ -38,13 +41,7 @@ onMounted(async () => {
     </div>
 
     <div class="mt-12" v-if="!isLoading">
-      <h2 class="mb-2 text-xl">Preview</h2>
-      <ReadOnlyViewer :content="component!.content" />
-    </div>
-
-    <div class="mt-12" v-if="!isLoading">
-      <h2 class="mb-2 text-xl">JSON</h2>
-      <JSONViewer :content="component!.content" />
+      <PageBuilder />
     </div>
   </div>
 </template>

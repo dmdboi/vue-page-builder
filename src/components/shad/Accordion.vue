@@ -8,7 +8,7 @@ defineProps<{ title: string }>();
   <Accordion type="single" collapsible>
     <AccordionItem value="item-1">
       <AccordionTrigger
-        class="p-4 font-semibold bg-white"
+        class="p-4 font-semibold text-secondary-foreground bg-secondary"
       >
         {{ title }}
       </AccordionTrigger>

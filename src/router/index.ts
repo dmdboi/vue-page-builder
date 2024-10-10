@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
+import EditorLayout from "@/layouts/EditorLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,12 +30,16 @@ const router = createRouter({
       ],
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
+      path: "/components/:id/edit",
+      name: "editComponentLayout",
+      component: EditorLayout,
+      children: [
+        {
+          name: "edit-component",
+          path: "/components/:id/edit",
+          component: () => import("../views/components/EditComponent.vue"),
+        },
+      ],
     },
     {
       path: "/pageBuilder",
