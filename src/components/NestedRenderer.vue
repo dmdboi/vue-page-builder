@@ -1,55 +1,6 @@
-<template>
-  <!-- Draggable wrapper for container elements like div/section -->
-  <VueDraggable
-    v-if="isContainerElement"
-    :class="['drag-area', element.attributes?.class]"
-    :tag="element.type"
-    v-model="element.content"
-    group="elements"
-    @click.self="selectElement(element)">
-    <!-- Render each child element -->
-    <template v-for="(childElement, index) in element.content" :key="index">
-      <!-- If string, just render string -->
-      <p v-if="typeof childElement === 'string'">{{ childElement }}</p>
-
-      <nested-renderer v-else-if="childElement.content && childElement.content.length > 0" :element="childElement" @update:element="updateChild(index, $event)" />
-      <!-- Render leaf elements -->
-      <component
-        @click.self="selectElement(childElement)"
-        v-else
-        :is="childElement.type"
-        :id="childElement.attributes?.id"
-        :class="childElement.attributes?.class"
-        :style="childElement.attributes?.style"
-        :src="childElement.attributes?.src"
-        :alt="childElement.attributes?.alt">
-        <template v-if="childElement.type === 'a' || typeof childElement.content === 'string'">
-          <a v-if="childElement.type === 'a'" :href="childElement.attributes?.href">{{ childElement.content[0] }}</a>
-          <p v-else>{{ childElement.content[0] }}</p>
-        </template>
-      </component>
-    </template>
-  </VueDraggable>
-
-  <!-- Leaf elements like img, a, etc. -->
-  <component
-    @click.self="selectElement(element)"
-    v-else
-    :is="element.type"
-    :id="element.attributes?.id"
-    :class="[element.attributes?.class, 'component']"
-    :style="element.attributes?.style"
-    :src="element.attributes?.src"
-    :alt="element.attributes?.alt">
-    <!-- String Content for Anchor or Paragraph -->
-    <template v-if="typeof element.content[0] === 'string'">
-      {{ element.content[0] }}
-    </template>
-  </component>
-</template>
-
 <script setup lang="ts">
 import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { VueDraggable } from "vue-draggable-plus";
 
 import type { ElementType } from "@/types";
@@ -59,7 +10,9 @@ interface Props {
   element: ElementType;
 }
 
-const { selectElement } = useElementStore();
+const elementStore = useElementStore();
+const { selectElement } = elementStore;
+const { selectedElement } = storeToRefs(useElementStore());
 
 const props = defineProps<Props>();
 const emits = defineEmits(["update:element"]);
@@ -84,23 +37,66 @@ const updateChild = (index: number, updatedElement: ElementType) => {
 };
 </script>
 
-<style scoped>
-.drag-area:hover {
-  border: 1px dashed #ccc;
-}
+<template>
+  <!-- Draggable wrapper for container elements like div/section -->
+  <VueDraggable
+    v-if="isContainerElement"
+    :class="['drag-area', element.attributes?.class]"
+    :tag="element.type"
+    v-model="element.content"
+    group="elements"
+    @click.self="selectElement(element)">
+    <!-- Render each child element -->
+    <template v-for="(childElement, index) in element.content" :key="index">
+      <!-- If string, just render string -->
+      <p v-if="typeof childElement === 'string'">{{ childElement }}</p>
 
-/* Prevent parent elements from having a border when a child is hovered */
-.drag-area .drag-area:hover {
-  border: none;
-}
+      <nested-renderer v-else-if="childElement.content && childElement.content.length > 0" :element="childElement" @update:element="updateChild(index, $event)" />
+      <!-- Render leaf elements -->
+      <component
+        @click.self="selectElement(childElement)"
+        v-else
+        :is="childElement.type"
+        :id="childElement.attributes?.id"
+        :class="[element.attributes?.class, 'component', selectedElement === element ? 'border-2 border-blue-500' : '']"
+        :style="childElement.attributes?.style"
+        :src="childElement.attributes?.src"
+        :alt="childElement.attributes?.alt">
+        <template v-if="childElement.type === 'a' || typeof childElement.content === 'string'">
+          <a v-if="childElement.type === 'a'" :href="childElement.attributes?.href">{{ childElement.content[0] }}</a>
+          <p v-else>{{ childElement.content[0] }}</p>
+        </template>
+      </component>
+    </template>
+  </VueDraggable>
+
+  <!-- Leaf elements like img, a, etc. -->
+  <component
+    @click.self="selectElement(element)"
+    v-else
+    :is="element.type"
+    :id="element.attributes?.id"
+    :class="[element.attributes?.class, 'component', selectedElement === element ? 'border-2 border-blue-500' : '']"
+    :style="element.attributes?.style"
+    :src="element.attributes?.src"
+    :alt="element.attributes?.alt">
+    <!-- String Content for Anchor or Paragraph -->
+    <template v-if="typeof element.content[0] === 'string'">
+      {{ element.content[0] }}
+    </template>
+  </component>
+</template>
+
+<style scoped>
 
 /* Add hover effect for other components like image, anchor, or paragraphs */
-.component:hover {
+.component:not(.border-blue-500):hover {
   border: 1px dashed #ccc;
+  cursor: pointer;
 }
 
 /* Ensure nested hover won't trigger parent border */
-.component .component:hover {
+.component .component:not(.border-blue-500):hover {
   border: none;
 }
 </style>
