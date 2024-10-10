@@ -1,44 +1,3 @@
-<template>
-  <div class="flex flex-row w-full h-screen">
-    <!-- Draggable Items Sidebar -->
-    <div class="w-1/5 p-4 bg-gray-100 border-r border-gray-300">
-      <Tabs :tabs="['elements', 'attributes']">
-        <template #elements>
-          <DraggableElements />
-        </template>
-        <template #attributes>
-          <AttributesTab />
-        </template>
-      </Tabs>
-
-      <Button @click="resetHTML" class="w-full mt-4"> Reset HTML </Button>
-    </div>
-
-    <!-- Dropzone where HTML gets built -->
-    <div class="w-4/5 p-6">
-      <VueDraggable
-        v-model="currentHTML"
-        :group="{
-          name: 'elements',
-          pull: 'clone',
-          put: e => {
-            console.log('Put', e);
-            return true;
-          },
-        }"
-        @clone="clone"
-        @spill="clone"
-        item-key="label"
-        class="min-h-full p-4 bg-white border border-gray-300 rounded-lg">
-        <template v-for="(element, index) in currentHTML" :key="index">
-          <!-- Pass the element as prop and handle updates via @update -->
-          <NestedRenderer :element="element" @update:element="updateElement(index, $event)" />
-        </template>
-      </VueDraggable>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { watch } from "vue";
 import { storeToRefs } from "pinia";
@@ -46,6 +5,7 @@ import { VueDraggable } from "vue-draggable-plus";
 
 import Tabs from "./shad/Tabs.vue";
 import { Button } from "./ui/button";
+
 import AttributesTab from "@/components/AttributesTab.vue";
 import NestedRenderer from "@/components/NestedRenderer.vue";
 import DraggableElements from "@/components/DraggableElements.vue";
@@ -93,6 +53,47 @@ watch(currentHTML, () => {
   console.log("Current HTML", currentHTML.value);
 });
 </script>
+
+<template>
+  <div class="flex flex-row w-full h-screen">
+    <!-- Draggable Items Sidebar -->
+    <div class="w-1/5 p-4 bg-gray-100 border-r border-gray-300">
+      <Tabs :tabs="['elements', 'attributes']">
+        <template #elements>
+          <DraggableElements />
+        </template>
+        <template #attributes>
+          <AttributesTab />
+        </template>
+      </Tabs>
+
+      <Button @click="resetHTML" class="w-full mt-4"> Reset HTML </Button>
+    </div>
+
+    <!-- Dropzone where HTML gets built -->
+    <div class="w-4/5 p-6">
+      <VueDraggable
+        v-model="currentHTML"
+        :group="{
+          name: 'elements',
+          pull: 'clone',
+          put: e => {
+            console.log('Put', e);
+            return true;
+          },
+        }"
+        @clone="clone"
+        @spill="clone"
+        item-key="label"
+        class="min-h-full p-4 bg-white border border-gray-300 rounded-lg">
+        <template v-for="(element, index) in currentHTML" :key="index">
+          <!-- Pass the element as prop and handle updates via @update -->
+          <NestedRenderer :element="element" @update:element="updateElement(index, $event)" />
+        </template>
+      </VueDraggable>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .builder-container {

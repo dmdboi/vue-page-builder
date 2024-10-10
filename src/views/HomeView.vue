@@ -1,23 +1,7 @@
-<script setup lang="ts">
-import PageBuilder from "@/components/PageBuilder.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <main>
-    <PageBuilder />
+    <h1>Home</h1>
   </main>
 </template>
-
-<style scoped>
-.panel__top {
-  padding: 0;
-  width: 100%;
-  display: flex;
-  position: initial;
-  justify-content: center;
-  justify-content: space-between;
-}
-.panel__basic-actions {
-  position: initial;
-}
-</style>
