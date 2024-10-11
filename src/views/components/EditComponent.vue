@@ -11,7 +11,7 @@ import type { Component } from "@/types/components";
 import PageBuilder from "@/components/PageBuilder.vue";
 
 const route = useRoute();
-const elementStore = useElementStore();
+const { setCurrentComponent } = useElementStore();
 
 const isLoading = ref(true);
 const component = ref<Component>();
@@ -21,7 +21,7 @@ onMounted(async () => {
   component.value = (await api.components.get(route.params.id as string)).data;
 
   // @ts-ignore
-  elementStore.currentHTML = component.value!.content;
+  setCurrentComponent(component.value);
   isLoading.value = false;
 });
 </script>

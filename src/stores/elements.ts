@@ -4,32 +4,32 @@ import type { ElementType } from "@/types";
 import { getRandomId } from "@/utils/id";
 
 export const useElementStore = defineStore("elements", () => {
-  const currentHTML = ref([
-    {
-      id: getRandomId(),
-      type: "div",
-      content: [
-        {
-          id: getRandomId(),
-          type: "p",
-          content: ["This is a paragraph"],
-        },
-        {
-          id: getRandomId(),
-          type: "a",
-          content: ["Click me"],
-          attributes: {
-            href: "#",
-            target: "_blank",
-          },
-        },
-      ],
-    },
-  ] as ElementType[]);
+  const currentHTML = ref([] as ElementType[]);
 
   const currentTab = ref("elements");
 
   const selectedElement = ref({} as ElementType);
+
+  /** Set the current component in the store */
+  function setCurrentComponent(component: ElementType) {
+    // Traverse component and set IDs
+    function traverseComponent(content: ElementType[]) {
+      content.forEach(item => {
+        // Assigning a random ID enables us to track the element in the store and update it
+        item.id = getRandomId();
+
+        if (item.content && typeof item.content[0] !== "string") {
+          traverseComponent(item.content.filter((child): child is ElementType => typeof child !== "string"));
+        }
+      });
+    }
+
+    traverseComponent(component.content as ElementType[]);
+
+    currentHTML.value = component.content as ElementType[];
+
+    console.log("setCurrentComponent", component);
+  }
 
   /** Set the selected Element in the store */
   function selectElement(element: ElementType) {
@@ -57,6 +57,15 @@ export const useElementStore = defineStore("elements", () => {
       updateElement(selectedElement.value);
       return;
     }
+
+    /** Remove any similar classes, i.e remove mt-8, if class begins with mt- */
+    const similarClassesPrefix = classValue.split("-")[0];
+
+    // Create a regex that matches any class that starts with 'mt-' and is followed by one or more digits
+    const regex = new RegExp(`${similarClassesPrefix}\\d+`, "g");
+
+    // Replace any matching class names and trim the result
+    selectedElement.value.attributes.class = classValue.replace(regex, "").trim();
 
     /** Set the class attribute */
     selectedElement.value.attributes.class += " " + classValue;
@@ -140,8 +149,25 @@ export const useElementStore = defineStore("elements", () => {
 
   /** Update the element in CurrentHTML */
   function updateElement(element: ElementType) {
-    const index = currentHTML.value.findIndex(el => el.id === element.id);
-    currentHTML.value[index] = element;
+    // Traverse the currentHTML array and find the element with the same ID
+    // Replace the element with the updated element
+    function traverseContent(content: ElementType[]) {
+      if (typeof content[0] === "string") {
+        return;
+      }
+
+      content.forEach(item => {
+        if (item.id === element.id) {
+          item = element;
+        }
+
+        if (item.content && typeof item.content[0] !== "string") {
+          traverseContent(item.content.filter((child): child is ElementType => typeof child !== "string"));
+        }
+      });
+    }
+
+    traverseContent(currentHTML.value);
   }
 
   function deleteElement() {
@@ -165,5 +191,6 @@ export const useElementStore = defineStore("elements", () => {
     deleteElement,
     currentTab,
     currentHTML,
+    setCurrentComponent,
   };
 });
