@@ -27,6 +27,11 @@ const router = createRouter({
           path: "/components/:id",
           component: () => import("../views/components/ViewComponent.vue"),
         },
+        {
+          name: "pages",
+          path: "/pages",
+          component: () => import("../views/pages/ListPages.vue"),
+        },
       ],
     },
     {
@@ -38,6 +43,18 @@ const router = createRouter({
           name: "edit-component",
           path: "/components/:id/edit",
           component: () => import("../views/components/EditComponent.vue"),
+        },
+      ],
+    },
+    {
+      path: "/pages/:id/edit",
+      name: "editPageLayout",
+      component: EditorLayout,
+      children: [
+        {
+          name: "edit-pages",
+          path: "/pages/:id/edit",
+          component: () => import("../views/pages/EditPage.vue"),
         },
       ],
     },

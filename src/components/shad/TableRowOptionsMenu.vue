@@ -22,7 +22,7 @@ async function deleteItem() {
       <DropdownMenuLabel>Options</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem>
-        <router-link :to="{ name: 'edit-component', params: { id } }" class="flex items-center w-full">
+        <router-link :to="{ name: `edit-${type}`, params: { id } }" class="flex items-center w-full">
           <PenIcon class="w-4 h-4 mr-2" />
           <span class="block">Edit</span>
         </router-link>

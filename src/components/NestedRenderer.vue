@@ -25,7 +25,7 @@ const elementContent = computed({
 
 // Check if the element is a container type
 const isContainerElement = computed(() => {
-  const containerTags = ["div", "section", "ul", "ol", "nav", "header", "footer", "li", "main"];
+  const containerTags = ["div", "section", "ul", "ol", "nav", "header", "footer", "li", "main", "undefined"];
   return containerTags.includes(props.element.type) && Array.isArray(props.element.content);
 });
 
@@ -88,7 +88,6 @@ const updateChild = (index: number, updatedElement: ElementType) => {
 </template>
 
 <style scoped>
-
 /* Add hover effect for other components like image, anchor, or paragraphs */
 .component:not(.border-blue-500):hover {
   border: 1px dashed #ccc;

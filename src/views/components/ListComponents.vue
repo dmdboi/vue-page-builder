@@ -17,7 +17,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl">List Components</h1>
+    <h1 class="text-2xl">Components</h1>
 
     <div class="mt-12">
       <DataTable :columns="componentTableColumns" :data="components" />
