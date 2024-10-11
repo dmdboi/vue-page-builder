@@ -17,7 +17,7 @@ const { selectedElement } = storeToRefs(elementStore);
 <template>
   <!-- SelectedElement -->
   <div>
-    Editing <strong>{{ selectedElement.type }}</strong>
+    Editing <strong>{{ selectedElement.type }}</strong> (#{{ selectedElement.id }})
   </div>
 
   <div class="mt-8">

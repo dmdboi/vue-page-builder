@@ -9,12 +9,24 @@ import { useElementStore } from "@/stores/elements";
 
 import type { Component } from "@/types/components";
 import PageBuilder from "@/components/PageBuilder.vue";
+import { useToastStore } from "@/stores/toast";
 
 const route = useRoute();
 const { setCurrentComponent } = useElementStore();
+const toastStore = useToastStore();
 
 const isLoading = ref(true);
 const component = ref<Component>();
+
+async function saveComponent() {
+  try {
+    await api.components.update(route.params.id as string, component.value);
+    toastStore.show("Success", "Component saved successfully");
+  } catch (error) {
+    console.error(error);
+    toastStore.show("Error", "Failed to save component", "destructive");
+  }
+}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -32,7 +44,7 @@ onMounted(async () => {
       <h1 class="text-2xl">Component</h1>
 
       <div>
-        <Button variant="default" @click=""> Save </Button>
+        <Button variant="default" @click="saveComponent"> Save </Button>
       </div>
     </div>
 
