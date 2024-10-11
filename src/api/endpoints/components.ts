@@ -13,7 +13,7 @@ async function create(data: any) {
 }
 
 async function update(id: string, data: any) {
-  return await client.put(`/components/${id}`, data);
+  return (await client.put(`/components/${id}`, data)).data;
 }
 
 export const components = {

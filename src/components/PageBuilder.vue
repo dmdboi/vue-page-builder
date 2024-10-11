@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { VueDraggable } from "vue-draggable-plus";
 
 import NestedRenderer from "@/components/NestedRenderer.vue";
+import { ref, type PropType } from "vue";
 
-import { useElementStore } from "@/stores/elements";
+const emits = defineEmits(["update:modelValue"]);
+const props = defineProps({
+  modelValue: {
+    type: Array as PropType<any[]>,
+    required: true,
+  },
+});
 
-const elementStore = useElementStore();
-const { currentHTML } = storeToRefs(elementStore);
+const localValue = ref(props.modelValue);
 
 // Function to handle updates from the child component
 const updateElement = (index: number, updatedElement: any) => {
-  currentHTML.value[index] = updatedElement;
+  const updatedContent = [...localValue.value];
+  updatedContent[index] = updatedElement;
+  localValue.value = updatedContent;
+  emits("update:modelValue", localValue.value);
 };
 </script>
 
@@ -26,7 +34,7 @@ const updateElement = (index: number, updatedElement: any) => {
       </div>
 
       <VueDraggable
-        v-model="currentHTML"
+        v-model="localValue"
         :group="{
           name: 'elements',
           pull: 'clone',
@@ -37,7 +45,7 @@ const updateElement = (index: number, updatedElement: any) => {
         }"
         item-key="label"
         class="min-h-full p-4 rounded-b-lg bg-secondary">
-        <template v-for="(element, index) in currentHTML" :key="index">
+        <template v-for="(element, index) in localValue" :key="index">
           <!-- Pass the element as prop and handle updates via @update -->
           <NestedRenderer :element="element" @update:element="updateElement(index, $event)" />
         </template>

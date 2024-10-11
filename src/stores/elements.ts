@@ -1,8 +1,11 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import type { ElementType } from "@/types";
 import { getRandomId } from "@/utils/id";
 
+import type { ElementType } from "@/types";
+
+/** ElementStore */
+/** This store is used for individual elements within a Component, Page or Template's content array */
 export const useElementStore = defineStore("elements", () => {
   const currentHTML = ref([] as ElementType[]);
 
