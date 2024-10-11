@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useElementStore } from "@/stores/elements";
-import { storeToRefs } from "pinia";
 
 const props = defineProps<{
   tabs: string[];
+  modelValue: string;
 }>();
-
-const { currentTab } = storeToRefs(useElementStore());
 </script>
 
 <template>
-  <Tabs :default-value="tabs[0]" :model-value="currentTab">
+  <Tabs :default-value="tabs[0]" :model-value="modelValue">
     <TabsList>
-      <TabsTrigger :value="tab" v-for="tab in props.tabs" @click="currentTab = tab" :key="tab"> {{ tab }} </TabsTrigger>
+      <TabsTrigger :value="tab" v-for="tab in props.tabs" @click="() => $emit('update:modelValue', tab)" :key="tab"> {{ tab }} </TabsTrigger>
     </TabsList>
     <TabsContent v-for="tab in props.tabs" :key="tab" :value="tab">
       <slot :name="tab" />
