@@ -2,6 +2,7 @@ import { h } from "vue";
 
 import type { ColumnDef } from "@tanstack/vue-table";
 import type { Component } from "./components";
+import TableRowOptionsMenu from "@/components/shad/TableRowOptionsMenu.vue";
 
 export const componentTableColumns: ColumnDef<Component>[] = [
   {
@@ -29,7 +30,14 @@ export const componentTableColumns: ColumnDef<Component>[] = [
     accessorKey: "id",
     header: () => h("div", { class: "text-right" }, "Actions"),
     cell: ({ row }) => {
-      return h("div", { class: "text-right font-medium" }, [h("a", { class: "text-right text-blue-500 font-medium w-32", href: `/components/${row.getValue("id")}` }, "View")]);
+      return h(
+        "div",
+        { class: "relative flex justify-end" },
+        h(TableRowOptionsMenu, {
+          id: row.getValue("id") as string,
+          type: "component",
+        })
+      );
     },
   },
 ];

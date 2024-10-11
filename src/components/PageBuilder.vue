@@ -1,25 +1,27 @@
 <script setup lang="ts">
+import { ref, type PropType } from "vue";
+import { SaveIcon } from "lucide-vue-next";
 import { VueDraggable } from "vue-draggable-plus";
 
+import Button from "./ui/button/Button.vue";
 import NestedRenderer from "@/components/NestedRenderer.vue";
-import { ref, type PropType } from "vue";
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:code"]);
 const props = defineProps({
-  modelValue: {
+  code: {
     type: Array as PropType<any[]>,
     required: true,
   },
 });
 
-const localValue = ref(props.modelValue);
+const localValue = ref(props.code);
 
-// Function to handle updates from the child component
+const saveChanges = () => {
+  emits("update:code", localValue.value);
+};
+
 const updateElement = (index: number, updatedElement: any) => {
-  const updatedContent = [...localValue.value];
-  updatedContent[index] = updatedElement;
-  localValue.value = updatedContent;
-  emits("update:modelValue", localValue.value);
+  localValue.value[index] = updatedElement;
 };
 </script>
 
@@ -27,10 +29,10 @@ const updateElement = (index: number, updatedElement: any) => {
   <div class="flex flex-row w-full">
     <!-- Dropzone where HTML gets built -->
     <div class="w-full">
-      <div class="w-full h-11 rounded-t-lg border-2 border-gray-200 bg-gray-200 flex justify-start items-center space-x-1.5 px-3">
-        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-        <span class="w-3 h-3 bg-orange-500 rounded-full"></span>
-        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+      <div class="w-full bg-secondary flex justify-start items-center space-x-1.5 p-2 border border-background rounded-t-lg">
+        <div class="">
+          <Button variant="dark" @click="saveChanges" class="space-x-2" size="sm"> <SaveIcon class="w-4 h-4" /> <span>Save</span> </Button>
+        </div>
       </div>
 
       <VueDraggable

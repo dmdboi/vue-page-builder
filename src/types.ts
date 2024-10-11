@@ -1,6 +1,8 @@
 export interface ElementType {
   id: string;
   type: string;
+  name: string;
+  ref: string;
   content: Array<string | ElementType>;
   attributes?: {
     id?: string;

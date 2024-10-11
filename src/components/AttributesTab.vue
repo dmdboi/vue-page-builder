@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useElementStore } from "@/stores/elements";
+import { ArrowLeftIcon } from "lucide-vue-next";
 
 import ClassSelector from "./shad/ClassSelector.vue";
 import Accordion from "./shad/Accordion.vue";
@@ -9,12 +9,23 @@ import Input from "./shad/Input.vue";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 
+import { useElementStore } from "@/stores/elements";
+
 const elementStore = useElementStore();
 const { setClassAttribute, deleteElement } = elementStore;
-const { selectedElement } = storeToRefs(elementStore);
+const { selectedElement, currentTab } = storeToRefs(elementStore);
 </script>
 
 <template>
+  <div>
+    <Button @click="currentTab = 'elements'" class="space-x-2 w-fit" variant="dark">
+      <ArrowLeftIcon class="w-4 h-4" />
+      <span>Elements</span>
+    </Button>
+  </div>
+
+  <h2 class="mt-4 mb-2 text-lg font-semibold tracking-tight">Attributes</h2>
+
   <!-- SelectedElement -->
   <div>
     Editing <strong>{{ selectedElement.type }}</strong> (#{{ selectedElement.id }})

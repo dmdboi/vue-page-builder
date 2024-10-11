@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch, defineEmits } from "vue";
+import { SaveIcon } from "lucide-vue-next";
 
 // CodeMirror
 import { EditorView } from "@codemirror/view";
@@ -15,6 +16,7 @@ import { json } from "@codemirror/lang-json";
 import beautify from "js-beautify";
 import { dracula } from "thememirror";
 import { Button } from "./ui/button";
+
 
 const emits = defineEmits(["update:code"]);
 const props = defineProps({
@@ -106,8 +108,13 @@ watch(
 </script>
 
 <template>
-  <Button variant="default" size="sm" @click="saveChanges"> Save HTML </Button>
-  <div ref="editor"></div>
+  <div class="w-full h-11 bg-secondary flex justify-start items-center space-x-1.5 p-2 border border-background rounded-t-lg">
+    <div class="">
+      <Button variant="dark" @click="saveChanges" class="space-x-2" size="sm"> <SaveIcon class="w-4 h-4" /> <span>Save</span> </Button>
+    </div>
+  </div>
+
+  <div ref="editor" class="overflow-y-scroll rounded-b-lg overflow-clip max-h-[48rem]"></div>
 </template>
 
 <style scoped>

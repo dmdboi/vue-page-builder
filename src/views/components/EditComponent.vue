@@ -36,7 +36,7 @@ async function saveComponent() {
     componentStore.setComponent(response);
     html.value = await componentStore.getContentInHTML();
 
-    toastStore.show("Success", "Component saved successfully");
+    toastStore.show("Success", "Component saved successfully", "success");
   } catch (error) {
     console.error(error);
     toastStore.show("Error", "Failed to save component", "destructive");
@@ -65,6 +65,31 @@ async function handleHTMLUpdate(code: string) {
   }
 }
 
+/** Called from CodeEditor when JSON code is saved */
+function handleJSONUpdate(code: any) {
+  try {
+    const json = JSON.parse(code);
+
+    componentStore.updateComponentProperty("content", json);
+
+    toastStore.show("Success", "JSON updated successfully");
+  } catch (error) {
+    console.error(error);
+    toastStore.show("Error", "Failed to update JSON", "destructive");
+  }
+}
+
+function handleUpdate(code: any) {
+  try {
+    componentStore.updateComponentProperty("content", code);
+
+    toastStore.show("Success", "Builder updated successfully");
+  } catch (error) {
+    console.error(error);
+    toastStore.show("Error", "Failed to update Builder", "destructive");
+  }
+}
+
 onMounted(async () => {
   isLoading.value = true;
 
@@ -84,10 +109,10 @@ onMounted(async () => {
 <template>
   <div>
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl">Component</h1>
+      <h1 class="text-2xl">Editing <input v-model="component.name" class="p-2 text-2xl font-bold bg-transparent rounded text-secondary-foreground" /></h1>
 
       <div>
-        <Button variant="default" @click="saveComponent"> Save </Button>
+        <Button variant="default" @click="saveComponent"> Publish </Button>
       </div>
     </div>
 
@@ -99,14 +124,16 @@ onMounted(async () => {
       <!-- Tabs -->
       <Tabs :tabs="['Editor', 'JSON', 'HTML']" v-model="currentTab" />
 
-      <PageBuilder v-if="currentTab === 'Editor'" v-model="component.content" class="mt-4" @update:modelValue="component = $event" />
+      <div class="mt-4">
+        <PageBuilder v-if="currentTab === 'Editor'" :code="component.content" @update:code="handleUpdate" />
 
-      <div v-if="currentTab === 'JSON'" class="overflow-y-scroll rounded-lg overflow-clip max-h-[48rem]">
-        <CodeEditor :code="JSON.stringify(component, null, 2)" mode="json" />
-      </div>
+        <div v-if="currentTab === 'JSON'">
+          <CodeEditor :code="JSON.stringify(component.content, null, 2)" mode="json" @update:code="handleJSONUpdate" />
+        </div>
 
-      <div v-if="currentTab === 'HTML'" class="overflow-y-scroll rounded-lg overflow-clip max-h-[48rem]">
-        <CodeEditor :code="html" mode="html" @update:code="handleHTMLUpdate" />
+        <div v-if="currentTab === 'HTML'">
+          <CodeEditor :code="html" mode="html" @update:code="handleHTMLUpdate" />
+        </div>
       </div>
     </div>
   </div>

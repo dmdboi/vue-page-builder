@@ -9,7 +9,7 @@ async function get(id: string) {
 }
 
 async function create(data: any) {
-  return await client.post("/components", data);
+  return (await client.post("/components", data)).data;
 }
 
 async function update(id: string, data: any) {
