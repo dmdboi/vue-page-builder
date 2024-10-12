@@ -29,7 +29,7 @@ const updateElement = (index: number, updatedElement: any) => {
   <div class="flex flex-row w-full">
     <!-- Dropzone where HTML gets built -->
     <div class="w-full">
-      <div class="w-full bg-secondary flex justify-start items-center space-x-1.5 p-2 border border-background rounded-t-lg">
+      <div class="w-full bg-secondary flex justify-start items-center space-x-1.5 p-2 border rounded-t-lg">
         <div class="">
           <Button variant="dark" @click="saveChanges" class="space-x-2" size="sm"> <SaveIcon class="w-4 h-4" /> <span>Save</span> </Button>
         </div>
@@ -46,10 +46,10 @@ const updateElement = (index: number, updatedElement: any) => {
           },
         }"
         item-key="label"
-        class="min-h-full p-4 rounded-b-lg bg-secondary">
+        class="min-h-full p-4 text-black bg-white border-b rounded-b-lg border-x">
         <template v-for="(element, index) in localValue" :key="index">
           <!-- Pass the element as prop and handle updates via @update -->
-          <NestedRenderer :element="element" @update:element="updateElement(index, $event)" />
+          <NestedRenderer :element="element" @update:element="updateElement(index, $event)" :isComponent="element.is_component" :isParent="true" />
         </template>
       </VueDraggable>
     </div>

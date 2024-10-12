@@ -124,17 +124,13 @@ onMounted(async () => {
 
     <div class="mt-12" v-if="!isLoading">
       <!-- Tabs -->
-      <Tabs :tabs="['Editor', 'JSON', 'HTML']" v-model="currentTab" />
+      <Tabs :tabs="['Editor', 'JSON']" v-model="currentTab" />
 
       <div class="mt-4">
         <PageBuilder v-if="currentTab === 'Editor'" :code="page.content" @update:code="handleUpdate" />
 
         <div v-if="currentTab === 'JSON'">
           <CodeEditor :code="JSON.stringify(page.content, null, 2)" mode="json" @update:code="handleJSONUpdate" />
-        </div>
-
-        <div v-if="currentTab === 'HTML'">
-          <CodeEditor :code="html" mode="html" @update:code="handleHTMLUpdate" />
         </div>
       </div>
     </div>

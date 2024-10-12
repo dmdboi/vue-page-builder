@@ -1,8 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
+/** Layouts */
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import EditorLayout from "@/layouts/EditorLayout.vue";
+
+/** Views */
+import HomeView from "../views/HomeView.vue";
+
+import ListComponents from "../views/components/ListComponents.vue";
+import EditComponent from "../views/components/EditComponent.vue";
+import ViewComponent from "../views/components/ViewComponent.vue";
+
+import ListPages from "../views/pages/ListPages.vue";
+import EditPage from "../views/pages/EditPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,17 +30,17 @@ const router = createRouter({
         {
           name: "components",
           path: "/components",
-          component: () => import("../views/components/ListComponents.vue"),
+          component: ListComponents,
         },
         {
           name: "component",
           path: "/components/:id",
-          component: () => import("../views/components/ViewComponent.vue"),
+          component: ViewComponent,
         },
         {
           name: "pages",
           path: "/pages",
-          component: () => import("../views/pages/ListPages.vue"),
+          component: ListPages,
         },
       ],
     },
@@ -42,7 +52,7 @@ const router = createRouter({
         {
           name: "edit-component",
           path: "/components/:id/edit",
-          component: () => import("../views/components/EditComponent.vue"),
+          component: EditComponent,
         },
       ],
     },
@@ -54,14 +64,9 @@ const router = createRouter({
         {
           name: "edit-pages",
           path: "/pages/:id/edit",
-          component: () => import("../views/pages/EditPage.vue"),
+          component: EditPage,
         },
       ],
-    },
-    {
-      path: "/pageBuilder",
-      name: "pageBuilder",
-      component: () => import("../views/PageBuilderView.vue"),
     },
   ],
 });

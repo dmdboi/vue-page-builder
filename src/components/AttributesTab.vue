@@ -33,7 +33,7 @@ const { selectedElement, currentTab } = storeToRefs(elementStore);
 
   <div class="mt-8">
     <!-- Accordion -->
-    <Accordion title="General" class="border rounded-lg overflow-clip">
+    <Accordion title="General" class="border rounded-lg overflow-clip bg-card">
       <div class="px-4">
         <Input label="ID" v-bind:model-value="selectedElement.id" />
       </div>
@@ -50,7 +50,7 @@ const { selectedElement, currentTab } = storeToRefs(elementStore);
     </Accordion>
 
     <!-- Margins -->
-    <Accordion title="Margins" class="mt-2 border rounded-lg overflow-clip">
+    <Accordion title="Margins" class="mt-2 border rounded-lg overflow-clip bg-card">
       <div class="px-4 mb-4">
         <Label for="margins">Top</Label>
         <Slider
@@ -77,7 +77,7 @@ const { selectedElement, currentTab } = storeToRefs(elementStore);
     </Accordion>
 
     <!-- Padding -->
-    <Accordion title="Padding" class="mt-2 border rounded-lg overflow-clip">
+    <Accordion title="Padding" class="mt-2 border rounded-lg overflow-clip bg-card">
       <div class="px-4 mb-4">
         <Label for="margins">Top</Label>
         <Slider @update="setClassAttribute" :classes="['pt-0', 'pt-1', 'pt-2', 'pt-3', 'pt-4', 'pt-5', 'pt-6', 'pt-7', 'pt-8', 'pt-9', 'pt-10']" class="mt-2" />
