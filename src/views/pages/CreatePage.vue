@@ -23,21 +23,21 @@ const currentTab = ref("Editor");
 
 const html = ref("");
 
-async function savePage() {
+async function createPage() {
   try {
-    const response = (await api.pages.update(route.params.id as string, page.value)).data;
+    const response = (await api.pages.create(page.value)).data;
 
     if (!response) {
-      throw new Error("Failed to save component");
+      throw new Error("Failed to create page");
     }
 
     pageStore.setPage(response);
     html.value = await pageStore.getContentInHTML();
 
-    toastStore.show("Success", "Page saved successfully", "success");
+    toastStore.show("Success", "Page created successfully", "success");
   } catch (error) {
     console.error(error);
-    toastStore.show("Error", "Failed to save page", "destructive");
+    toastStore.show("Error", "Failed to create page", "destructive");
   }
 }
 
@@ -110,7 +110,7 @@ onMounted(async () => {
       <h1 class="text-2xl">Creating <input v-model="page.name" class="p-2 text-2xl font-bold bg-transparent rounded text-secondary-foreground" /></h1>
 
       <div>
-        <Button variant="default" @click="savePage"> Publish </Button>
+        <Button variant="default" @click="createPage"> Publish </Button>
       </div>
     </div>
 
