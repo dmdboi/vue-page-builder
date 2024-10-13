@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { defineProps, defineEmits, ref } from "vue";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-defineProps({
+defineEmits(["update:modelValue"]);
+const props = defineProps({
   label: {
     type: String,
     required: true,
@@ -13,11 +16,13 @@ defineProps({
     default: "",
   },
 });
+
+const localValue = ref(props.modelValue);
 </script>
 
 <template>
-  <div class="grid w-full max-w-sm items-center gap-1.5">
+  <div class="items-center w-full">
     <Label :for="label" v-if="label">{{ label }}</Label>
-    <Input :id="label" :type="label" class="w-full" />
+    <Input :id="label" v-model="localValue" class="w-full mt-1" @input="$emit('update:modelValue', $event.target.value)" />
   </div>
 </template>

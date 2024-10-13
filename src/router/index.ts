@@ -13,6 +13,7 @@ import ViewComponent from "../views/components/ViewComponent.vue";
 
 import ListPages from "../views/pages/ListPages.vue";
 import EditPage from "../views/pages/EditPage.vue";
+import ViewSite from "@/views/sites/ViewSite.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
           name: "home",
           path: "",
           component: HomeView,
+        },
+        {
+          name: "settings",
+          path: "/settings",
+          component: ViewSite,
         },
         {
           name: "components",

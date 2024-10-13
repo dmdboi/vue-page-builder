@@ -43,28 +43,6 @@ async function savePage() {
   }
 }
 
-/** Called from CodeEditor when HTML code is saved */
-async function handleHTMLUpdate(code: string) {
-  try {
-    // Remove all newlines and whitespace
-    const cleanedCode = code.replace(/\n/g, "").replace(/\s\s+/g, "");
-
-    const json = await HTMLToJSON(cleanedCode);
-
-    if (!json) {
-      throw new Error("Failed to parse HTML");
-    }
-
-    pageStore.updatePageProperty("content", [json]);
-    html.value = code;
-
-    toastStore.show("Success", "HTML updated successfully");
-  } catch (error) {
-    console.error(error);
-    toastStore.show("Error", "Failed to update HTML", "destructive");
-  }
-}
-
 /** Called from CodeEditor when JSON code is saved */
 function handleJSONUpdate(code: any) {
   try {
