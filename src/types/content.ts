@@ -1,8 +1,8 @@
 interface Content {
-  id: string;
-  name: string;
-  ref: string;
-  type: "page" | "component" | "template";
+  id?: string;
+  name?: string;
+  ref?: string;
+  type: string;
   content?: Content[] | string[];
   data?: Record<string, any>;
 }

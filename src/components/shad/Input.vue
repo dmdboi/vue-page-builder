@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from "vue";
+import { defineProps, defineEmits, ref, watchEffect } from "vue";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,10 @@ const props = defineProps({
 });
 
 const localValue = ref(props.modelValue);
+
+watchEffect(() => {
+  localValue.value = props.modelValue;
+});
 </script>
 
 <template>

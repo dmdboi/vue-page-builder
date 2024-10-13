@@ -11,6 +11,7 @@ export interface ElementType {
     href?: string;
     alt?: string;
     src?: string;
+    target?: string;
   };
   is_parent?: boolean;
   is_component?: boolean;

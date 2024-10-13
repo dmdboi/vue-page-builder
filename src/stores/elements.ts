@@ -37,6 +37,12 @@ export const useElementStore = defineStore("elements", () => {
   /** Set the selected Element in the store */
   function selectElement(element: ElementType) {
     selectedElement.value = element;
+
+    // Add "attributes" object to the selected element
+    if(!selectedElement.value.attributes) {
+      selectedElement.value.attributes = {};
+    }
+
     currentTab.value = "attributes";
   }
 
@@ -45,109 +51,10 @@ export const useElementStore = defineStore("elements", () => {
     selectedElement.value = {} as ElementType;
   }
 
-  /** Set a class attribute on the element */
-  function setClassAttribute(classValue: string) {
-    /** If selectedElement has no attribute object yet */
-    if (!selectedElement.value.attributes) {
-      selectedElement.value.attributes = {
-        class: "",
-      };
-    }
-
-    /** If the class already exists, remove it */
-    if (selectedElement.value.attributes.class && selectedElement.value.attributes.class.includes(classValue)) {
-      selectedElement.value.attributes.class = selectedElement.value.attributes.class.replace(classValue, "").trim();
-      updateElement(selectedElement.value);
-      return;
-    }
-
-    /** Remove any similar classes, i.e remove mt-8, if class begins with mt- */
-    const similarClassesPrefix = classValue.split("-")[0];
-
-    // Create a regex that matches any class that starts with 'mt-' and is followed by one or more digits
-    const regex = new RegExp(`${similarClassesPrefix}\\d+`, "g");
-
-    // Replace any matching class names and trim the result
-    selectedElement.value.attributes.class = classValue.replace(regex, "").trim();
-
-    /** Set the class attribute */
-    selectedElement.value.attributes.class += " " + classValue;
-
-    updateElement(selectedElement.value);
-  }
-
-  function removeClassAttribute(classValue: string) {
-    console.log("removeClassAttribute", classValue);
-
-    // Remove the class from the class attribute
-    if (selectedElement.value.attributes?.class) {
-      selectedElement.value.attributes.class = selectedElement.value.attributes.class.replace(classValue, "").trim();
-    }
-
-    console.log("selectedElement.value.attributes.class", selectedElement.value.attributes);
-
-    updateElement(selectedElement.value);
-  }
-
-  /** Set a style attribute on the element */
-  function setStyleAttribute(e: Event) {
-    /** If selectedElement has no attribute object yet */
-    if (!selectedElement.value.attributes) {
-      selectedElement.value.attributes = {
-        style: {},
-      };
-    }
-
-    /** Set the style attribute */
+  /** Set a property on SelectedElement */
+  function setElementProperty(property: string, value: string | Record<string, string | number>) {
     // @ts-ignore
-    selectedElement.value.attributes.style = (e.target as HTMLInputElement).value;
-
-    updateElement(selectedElement.value);
-  }
-
-  /** Set a src attribute on the element */
-  function setSrcAttribute(e: Event) {
-    /** If selectedElement has no attribute object yet */
-    if (!selectedElement.value.attributes) {
-      selectedElement.value.attributes = {
-        src: "",
-      };
-    }
-
-    /** Set the src attribute */
-    selectedElement.value.attributes.src = (e.target as HTMLInputElement).value;
-
-    updateElement(selectedElement.value);
-  }
-
-  /** Set an alt attribute on the element */
-  function setAltAttribute(e: Event) {
-    /** If selectedElement has no attribute object yet */
-    if (!selectedElement.value.attributes) {
-      selectedElement.value.attributes = {
-        alt: "",
-      };
-    }
-
-    /** Set the alt attribute */
-    selectedElement.value.attributes.alt = (e.target as HTMLInputElement).value;
-
-    updateElement(selectedElement.value);
-  }
-
-  /** Set an href attribute on the element */
-  function setHrefAttribute(e: Event) {
-    /** If selectedElement has no attribute object yet */
-    if (!selectedElement.value.attributes) {
-      selectedElement.value.attributes = {
-        href: "",
-      };
-    }
-
-    /** Set the href attribute */
-    selectedElement.value.attributes.href = (e.target as HTMLInputElement).value;
-
-    updateElement(selectedElement.value);
+    selectedElement.value[property] = value;
   }
 
   /** Update the element in CurrentHTML */
@@ -184,12 +91,7 @@ export const useElementStore = defineStore("elements", () => {
     selectedElement,
     selectElement,
     clearSelection,
-    setClassAttribute,
-    removeClassAttribute,
-    setStyleAttribute,
-    setSrcAttribute,
-    setAltAttribute,
-    setHrefAttribute,
+    setElementProperty,
     updateElement,
     deleteElement,
     currentTab,
