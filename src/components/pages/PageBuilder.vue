@@ -3,8 +3,8 @@ import { ref, type PropType } from "vue";
 import { SaveIcon } from "lucide-vue-next";
 import { VueDraggable } from "vue-draggable-plus";
 
-import Button from "./ui/button/Button.vue";
-import NestedRenderer from "@/components/NestedRenderer.vue";
+import Button from "../ui/button/Button.vue";
+import NestedRenderer from "./NestedRenderer.vue";
 
 const emits = defineEmits(["update:code"]);
 const props = defineProps({

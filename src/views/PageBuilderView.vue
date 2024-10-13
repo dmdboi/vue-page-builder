@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageBuilder from "@/components/PageBuilder.vue";
+import PageBuilder from "@/components/components/ComponentBuilder.vue";
 </script>
 
 <template>

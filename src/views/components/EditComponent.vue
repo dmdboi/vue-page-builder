@@ -5,7 +5,7 @@ import { storeToRefs } from "pinia";
 // @ts-ignore
 import { HTMLToJSON } from "html-to-json-parser";
 
-import PageBuilder from "@/components/PageBuilder.vue";
+import PageBuilder from "@/components/components/ComponentBuilder.vue";
 import CodeEditor from "@/components/CodeEditor.vue";
 import { Button } from "@/components/ui/button";
 import Tabs from "@/components/shad/Tabs.vue";
@@ -14,6 +14,7 @@ import api from "@/api/api";
 import { useComponentStore } from "@/stores/components";
 import { useToastStore } from "@/stores/toast";
 import router from "@/router";
+import ComponentBuilder from "@/components/components/ComponentBuilder.vue";
 
 const route = useRoute();
 const componentStore = useComponentStore();
@@ -125,7 +126,7 @@ onMounted(async () => {
       <Tabs :tabs="['Editor', 'JSON', 'HTML']" v-model="currentTab" />
 
       <div class="mt-4">
-        <PageBuilder v-if="currentTab === 'Editor'" :code="component.content" @update:code="handleUpdate" />
+        <ComponentBuilder v-if="currentTab === 'Editor'" :code="component.content" @update:code="handleUpdate" />
 
         <div v-if="currentTab === 'JSON'">
           <CodeEditor :code="JSON.stringify(component.content, null, 2)" mode="json" @update:code="handleJSONUpdate" />

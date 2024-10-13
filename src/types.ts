@@ -12,4 +12,6 @@ export interface ElementType {
     alt?: string;
     src?: string;
   };
+  is_parent?: boolean;
+  is_component?: boolean;
 }

@@ -2,10 +2,8 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
-// @ts-ignore
-import { HTMLToJSON } from "html-to-json-parser";
 
-import PageBuilder from "@/components/PageBuilder.vue";
+import PageBuilder from "@/components/pages/PageBuilder.vue";
 import CodeEditor from "@/components/CodeEditor.vue";
 import { Button } from "@/components/ui/button";
 import Tabs from "@/components/shad/Tabs.vue";
